@@ -80,7 +80,7 @@ shell_quotearg(const char *path, unsigned char *buf,
     dst = buf;
 
     while (*src && dst < endp -1) {
-        if (strchr(" !\"#$&()*;<>?['\\]^`{|}~", *src)) {
+        if (strchr("\t\n\r !\"#$&()*;<>?['\\]^`{|}~", *src)) {
             if (dst+1 >= endp)
                 return 0;
             *dst++ = '\\';
