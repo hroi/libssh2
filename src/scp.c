@@ -45,7 +45,7 @@
 
 
 /* Max. length of a quoted string after libssh2_shell_quotearg() processing */
-#define _libssh2_shell_quotedsize(s)     (2 * strlen(s))
+#define _libssh2_shell_quotedsize(s)     (3 * strlen(s))
 
 /*
   This function quotes a string in a way suitable to be used with a
@@ -80,14 +80,22 @@ shell_quotearg(const char *path, unsigned char *buf,
     dst = buf;
 
     while (*src && dst < endp -1) {
-        if (strchr("\t\n\r !\"#$&()*;<>?['\\]^`{|}~", *src)) {
-            if (dst+1 >= endp)
+        if (strchr("\t !\"#$&()*;<>?['\\]^`{|}~", *src)) {
+            if (dst+2 >= endp)
                 return 0;
             *dst++ = '\\';
-        }
-        if (dst+1 >= endp)
-            return 0;
-        *dst++ = *src++;
+	    *dst++ = *src++;
+        } else if (strchr("\n\r", *src)) {
+            if (dst+3 >= endp)
+                return 0;
+	    *dst++ = '"';
+	    *dst++ = *src++;
+	    *dst++ = '"';
+	} else {
+	    if (dst+1 >= endp)
+		return 0;
+	    *dst++ = *src++;
+	}
     }
     if (dst+1 >= endp)
         return 0;
