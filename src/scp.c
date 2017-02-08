@@ -84,18 +84,18 @@ shell_quotearg(const char *path, unsigned char *buf,
             if (dst+2 >= endp)
                 return 0;
             *dst++ = '\\';
-	    *dst++ = *src++;
+            *dst++ = *src++;
         } else if (strchr("\n\r", *src)) {
             if (dst+3 >= endp)
                 return 0;
-	    *dst++ = '"';
-	    *dst++ = *src++;
-	    *dst++ = '"';
-	} else {
-	    if (dst+1 >= endp)
-		return 0;
-	    *dst++ = *src++;
-	}
+            *dst++ = '"';
+            *dst++ = *src++;
+            *dst++ = '"';
+        } else {
+            if (dst+1 >= endp)
+            return 0;
+            *dst++ = *src++;
+        }
     }
     if (dst+1 >= endp)
         return 0;
