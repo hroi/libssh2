@@ -93,7 +93,7 @@ shell_quotearg(const char *path, unsigned char *buf,
             *dst++ = '"';
         } else {
             if (dst+1 >= endp)
-            return 0;
+                return 0;
             *dst++ = *src++;
         }
     }
