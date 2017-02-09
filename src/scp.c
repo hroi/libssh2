@@ -62,7 +62,7 @@
   Length of the resulting string (not counting the terminating '\0'),
   or 0 in case of errors, e.g. result buffer too small
 
-  A result buffer two times the size of the input buffer should be safe.
+  A result buffer three times the size of the input buffer should be safe.
 
   Note: this function could possible be used elsewhere within libssh2, but
   until then it is kept static and in this source file.
@@ -81,11 +81,13 @@ shell_quotearg(const char *path, unsigned char *buf,
 
     while (*src && dst < endp -1) {
         if (strchr("\t !\"#$&()*;<>?['\\]^`{|}~", *src)) {
+            /* special shell characters: backslash escape */
             if (dst+2 >= endp)
                 return 0;
             *dst++ = '\\';
             *dst++ = *src++;
-        } else if (strchr("\n\r", *src)) {
+        } else if (iscntrl(*src)) {
+            /* control characters: double-quote */
             if (dst+3 >= endp)
                 return 0;
             *dst++ = '"';
